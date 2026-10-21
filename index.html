@@ -149,6 +149,31 @@ a:hover{color:#D7361F}
 @keyframes yk-spin{to{transform:rotate(360deg)}}
 @keyframes yk-float{0%,100%{transform:translateY(0) rotate(-6deg)}50%{transform:translateY(-8px) rotate(-4deg)}}
 </style>
+<script>
+/* URLを常に https://yokimono.co.jp/ のまま表示する（旧サイトの ?page_id= や #top などを消す） */
+(function(){
+  var h = location.hash ? decodeURIComponent(location.hash.slice(1)) : '';
+  if (location.search || location.hash || location.pathname !== '/') {
+    try { history.replaceState(null, '', '/'); } catch (e) {}
+  }
+  function go(id){
+    var el = id && document.getElementById(id);
+    if (!el || id === 'top') { window.scrollTo({top:0, behavior:'smooth'}); return; }
+    el.scrollIntoView({behavior:'smooth'});
+  }
+  if (h && h !== 'top') {
+    window.addEventListener('load', function(){ go(h); });
+  }
+  document.addEventListener('click', function(e){
+    var a = e.target.closest && e.target.closest('a[href^="#"]');
+    if (!a) return;
+    var id = a.getAttribute('href').slice(1);
+    if (id && !document.getElementById(id)) return;
+    e.preventDefault();
+    go(id);
+  });
+})();
+</script>
 </head>
 <body>
 <div style="min-height:100vh;background:#F6F1E7;overflow-x:hidden">
